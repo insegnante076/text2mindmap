@@ -30,8 +30,8 @@ appFunctions = (function() {
 			const type = ".txt";
 			fileExport.saveFile(content, title, type);
 			unsavedChanges.setHasChanges(false);
-			settings.setSetting("documentTitle", settings.getDefaultValue("documentTitle"));
-			settings.setSetting("documentContent", settings.getDefaultValue("documentContent"));
+			settings.setSetting("documentTitle", title);
+			settings.setSetting("documentContent", content);
 		},
 
 		// Set the focus on the input box for renaming the document

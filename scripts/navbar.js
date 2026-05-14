@@ -16,8 +16,7 @@ navbar = (function() {
 		}
 	}
 
-	$(document).ready(function() {
-		// A map of dropdown item ids and functions to call when the item is clicked.
+	function init() {
 		const idFunctionMap = {
 			"file-new": appFunctions.fileNew,
 			"file-open": appFunctions.fileOpen,
@@ -26,32 +25,29 @@ navbar = (function() {
 			"file-preferences": appFunctions.filePreferences,
 		};
 
-		let $links = $(".navbar a");
-
-		// When the dropdown item is clicked, call the appropriate function.
+		const $links = $(".navbar a");
 		$links.on("click touchstart", function(event) {
 			if ($(this).attr("href") === "#") {
 				event.preventDefault();
 			}
 			const id = $(this).attr("id");
-			console.log(id);
 			if (id in idFunctionMap) {
 				idFunctionMap[id]($(this));
 				closeDropdowns();
 			}
 		});
 
-		// Close all open dropdowns if the user clicks anywhere but the dropdown.
-		$(document).on("click click", function(event) {
+		$(document).on("click", function(event) {
 			closeDropdowns();
-			let $navbarDropdown = $(event.target).parent(".navbar-dropdown");
+			const $navbarDropdown = $(event.target).parent(".navbar-dropdown");
 			if ($navbarDropdown.length !== 0) {
 				$navbarDropdown.find(".dropdown-content").show();
 			}
 		});
-	});
+	}
 
 	return {
+		init,
 		setVisibilityIcon
 	}
 }());

@@ -34,18 +34,15 @@ paneResizer = (function() {
         return this.get(0).scrollHeight > this.innerHeight();
     }
 
-	// Set the initial state of the various elements.
-	$(document).ready(function() {
+	function init() {
 		$paneContainer = $("#pane-container");
 		$dragbar = $("#dragbar");
 		$editorPane = $("#editor-pane");
 		$viewerPane = $("#viewer-pane");
 		$editorCollapseButton = $("#editor-collapse-button");
 		$viewerCollapseButton = $("#viewer-collapse-button");
-		$viewer = $viewerPane.find("#viewer");
 		$body = $("body");
 		$textArea = $("#textArea");
-		// Show the collapse buttons and set the panes to their initial size.
 		$editorCollapseButton.css("visibility", "visible");
 		$viewerCollapseButton.css("visibility", "visible");
 
@@ -53,25 +50,20 @@ paneResizer = (function() {
 		oldViewerPanePercentage = viewerPanePercentage;
 		resizePanesToPercentage(editorPanePercentage, viewerPanePercentage);
 
-		// On window resize, scale the sizes of the panes so they keep the same relative size.
 		$(window).on("resize", function() {
 			resizePanesToPercentage(editorPanePercentage, viewerPanePercentage);
 		});
-	
-		// When the buttons to open a collapsed pane is pressed,
-		// open the appropriate pane.
+
 		$editorCollapseButton.on("click touchstart", toggleViewer);
 		$viewerCollapseButton.on("click touchstart", toggleEditor);
-		
+
 		$dragbar.on("mousedown", function(mousedownEvent) {
 			dragging = true;
 			$body.addClass("no-selection");
 			const mouseDownPos = mousedownEvent.pageX;
 			const initialLeftPaneWidth = $editorPane.width();
 			const initialRightPaneWidth = $viewerPane.width();
-	
-			// Resize the panes based on the current mouse position relative to
-			// the position of the dragbar when it was clicked.
+
 			$(document).on("mousemove", function(mousemoveEvent) {
 				if (dragging) {
 					const deltaPageX = mousemoveEvent.pageX - mouseDownPos;
@@ -93,7 +85,7 @@ paneResizer = (function() {
 					resizePanesToPercentage(newEditorPanePercentage, newViewerPanePercentage);
 				}
 			});
-	
+
 			$(document).on("mouseup", function() {
 				if (dragging) {
 					dragging = false;
@@ -102,7 +94,13 @@ paneResizer = (function() {
 				}
 			});
 		});
-	});
+	}
+
+	return {
+		init,
+		toggleViewer,
+		toggleEditor
+	}
 
 	// Resize the two panes to percentage sizes.
 	function resizePanesToPercentage(newEditorPanePercentage, newViewerPanePercentage) {
