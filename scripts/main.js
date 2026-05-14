@@ -49,5 +49,50 @@
             } 
             unsavedChanges.setHasChanges(true);
         });
+
+        const $fullscreenButton = $('#viewer-fullscreen-button');
+
+        function getFullscreenElement() {
+            return document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+        }
+
+        function updateFullscreenButton() {
+            if (getFullscreenElement()) {
+                $fullscreenButton.attr('title', 'Esci da schermo intero');
+                $fullscreenButton.find('i').removeClass('fa-expand').addClass('fa-compress');
+            } else {
+                $fullscreenButton.attr('title', 'Schermo intero');
+                $fullscreenButton.find('i').removeClass('fa-compress').addClass('fa-expand');
+            }
+        }
+
+        function toggleViewerFullscreen() {
+            const viewerPane = document.getElementById('viewer-pane');
+            if (getFullscreenElement()) {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            } else {
+                if (viewerPane.requestFullscreen) {
+                    viewerPane.requestFullscreen();
+                } else if (viewerPane.webkitRequestFullscreen) {
+                    viewerPane.webkitRequestFullscreen();
+                } else if (viewerPane.msRequestFullscreen) {
+                    viewerPane.msRequestFullscreen();
+                }
+            }
+        }
+
+        $fullscreenButton.on('click', function(event) {
+            event.preventDefault();
+            toggleViewerFullscreen();
+        });
+
+        $(document).on('fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange', updateFullscreenButton);
+        updateFullscreenButton();
     })
 }());
